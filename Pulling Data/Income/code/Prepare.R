@@ -1,0 +1,60 @@
+## Pulling Income 
+
+## Importing libraries ============
+
+library(dplyr)
+library(tidycensus)
+library(stringr)
+options(scipen=999)
+
+## Setting needed parameters ======================
+
+years <- 2014:2020
+state <- "VA"
+
+## Output file names =======================
+
+dataDirectory <- "Pulling Data/Income/data/"
+
+fileOutput <- paste0("va_cttr_2014_2020_income.csv")
+
+county_fips <- c(550, 620, 650, 700, 710, 735, 740, 800, 810,
+                 830, 073, 093, 095, 115, 175, 199)
+
+## Exploring what id's to pull ======
+
+variables <- tidycensus::load_variables(year = 2014, dataset = "acs5/subject", cache = TRUE) # loads what variables exist for this year
+View(variables) # using this and https://data.census.gov/ I know that I need to pull data from the table S1901
+
+## Pulling the data =================
+
+    ### Median Income ======================
+    # S1901_C01_012 --- Households!!Estimate!!Median income (dollars)
+income <- NULL
+for (year in years) {
+  temp <- get_acs(county = county_fips, state = "VA", 
+                  geography = "county",
+                  variables = "S1901_C01_012", 
+                  year = year, geometry = TRUE,) %>% mutate(year = year)
+  income <- rbind(income, temp)
+}
+
+## Save the data ============================
+
+write.csv(income, file=paste0(dataDirectory, fileOutput))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
