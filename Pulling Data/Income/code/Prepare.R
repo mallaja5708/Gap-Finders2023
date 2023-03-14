@@ -43,8 +43,8 @@ for (year in years) {
 
 ## Save the data ============================
 
-#write.csv(income, file=paste0(dataDirectory, fileOutput))
-write_sf(income, file=paste0(dataDirectory, fileOutput), )
+write.csv(st_drop_geometry(income), file=paste0(dataDirectory, fileOutput, ".csv"))
+st_write(obj = income, dsn = paste0(dataDirectory, fileOutput, ".shp"), delete_dsn = TRUE)
 
 
 
