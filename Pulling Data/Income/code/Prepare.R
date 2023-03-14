@@ -5,6 +5,8 @@
 library(dplyr)
 library(tidycensus)
 library(stringr)
+library(sf)
+library(ggplot2)
 options(scipen=999)
 
 ## Setting needed parameters ======================
@@ -16,7 +18,7 @@ state <- "VA"
 
 dataDirectory <- "Pulling Data/Income/data/"
 
-fileOutput <- paste0("va_cttr_2014_2020_income.csv")
+fileOutput <- paste0("va_cttr_2014_2020_income")
 
 county_fips <- c(550, 620, 650, 700, 710, 735, 740, 800, 810,
                  830, 073, 093, 095, 115, 175, 199)
@@ -41,8 +43,13 @@ for (year in years) {
 
 ## Save the data ============================
 
-write.csv(income, file=paste0(dataDirectory, fileOutput))
+#write.csv(income, file=paste0(dataDirectory, fileOutput))
+write_sf(income, file=paste0(dataDirectory, fileOutput), )
 
+
+
+ggplot() + 
+  geom_sf(data = income, aes(fill = estimate))
 
 
 
